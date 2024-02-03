@@ -26,7 +26,7 @@ namespace TestService
         public bool radintv = false;
         public int maxInterval = 60000;
         public int minInterval = 5000;
-        public List<Tuple<int, int>> timeSpans;
+        public List<Tuple<int, int>> timeSpans = new List<Tuple<int, int>>();
         public int times = 0;
         public Dictionary<string, int> result = new Dictionary<string, int>();
         private byte ControlKey = 0x6A;
