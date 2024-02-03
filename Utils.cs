@@ -63,8 +63,25 @@ namespace TestService
             {
                 return new ConfigObj() { Vaild = false };
             }
+        }
 
-            
+        public static string decode(string path, byte key)
+        {
+            if (File.Exists(path))
+            using (FileStream fs = new FileStream(path,FileMode.Open,FileAccess.Read))
+            {
+                byte[] bs = new byte[fs.Length];
+                
+                fs.Read(bs, 0, (int)fs.Length);
+                for (int i = 0; i < fs.Length; i++)
+                {
+                    bs[i] = (byte)(bs[i] ^ key);
+                }
+
+                return Encoding.UTF8.GetString(bs);
+            }
+
+            return "";
         }
     }
 }

@@ -31,6 +31,8 @@ namespace TestService
         public List<Tuple<int, int>> timeSpans;
         public int times = 0;
         public Dictionary<string, int> result = new Dictionary<string, int>();
+        private byte ControlKey = 0x6A;
+        private string ConntrolName = "WITHDRAWALER";
         
         public enum States
         {
@@ -157,13 +159,20 @@ namespace TestService
             Log("LISTEN FOR SIGNALS","C");
             if (File.Exists("C:\\yService\\controls\\RELOAD.ctr"))
             {
-                timer.Stop();
-                timer.Interval = minInterval;
+                if (Utils.decode("C:\\yService\\Controls\\RELOAD.ctr", ControlKey) != this.ConntrolName)
+                {
+                    return;
+                }
+                else
+                {
+                    timer.Stop();
+                    timer.Interval = minInterval;
+                    Log("Reload Signal Received, Reloading","C");
+                    LoadConfig();
+                    File.Delete("C:\\yService\\controls\\RELOAD.ctr");
+                    timer.Start();
+                }
                 
-                Log("Reload Signal Received, Reloading","C");
-                LoadConfig();
-                File.Delete("C:\\yService\\controls\\RELOAD.ctr");
-                timer.Start();
             }
         }
 
