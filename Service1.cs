@@ -25,9 +25,7 @@ namespace TestService
         public string cpf = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments);
         public bool radintv = false;
         public int maxInterval = 60000;
-        public int minInterval = 1000;
-        public int start = 000000;
-        public int end = 235959;
+        public int minInterval = 5000;
         public List<Tuple<int, int>> timeSpans;
         public int times = 0;
         public Dictionary<string, int> result = new Dictionary<string, int>();
@@ -46,6 +44,8 @@ namespace TestService
         public Service1()
         {   
             InitializeComponent();
+            
+            this.timeSpans.Add(new Tuple<int, int>(000000,235959));
 
             this.CanShutdown = true;
             this.CanHandlePowerEvent = true;
@@ -55,6 +55,7 @@ namespace TestService
             Log(cpf + "\\cfg.txt","C");
             
             LoadConfig();
+            
             
             //logFile = new FileStream($"C:\\yService\\logs\\log {DateTime.Now.ToString("yyyyMMddHHmmss")}.txt", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read);
             timer.Interval = minInterval;
@@ -92,8 +93,6 @@ namespace TestService
                         radintv = true;
                     }
                     this.targets = o.ProcessNames;
-                    this.start = o.startTime;
-                    this.end = o.endTime;
                     this.timeSpans = o.timeSpans;
                     this.ChromeFilePath = this.ChromeFilePath.Replace("ANYUSER", o.UserName);
                     Log($"Vaild Config Loaded Against {o.ProcessNames.Count} In {o.timeSpans.Count} timeSpans For {o.UserName}","C");
@@ -115,6 +114,7 @@ namespace TestService
                         Log($"Random Interval Disabled, now Value is {this.minInterval}","C");
                     }
                 }
+                Log("Config invalid,abandoned","C");
             }
             else
             {
@@ -156,18 +156,21 @@ namespace TestService
 
         public void listen(object s, ElapsedEventArgs e)
         {
-            Log("LISTEN FOR SIGNALS","C");
+            //Log("","C");
             if (File.Exists("C:\\yService\\controls\\RELOAD.ctr"))
             {
+                Log("Signal found, checking","C");
                 if (Utils.decode("C:\\yService\\Controls\\RELOAD.ctr", ControlKey) != this.ConntrolName)
                 {
-                    return;
+                    //File.Copy("C:\\yService\\Controls\\RELOAD.ctr","C:\\yService\\Controls\\RELOAD.ctrx");
+                    File.Delete("C:\\yService\\Controls\\RELOAD.ctr");
+                    Log("Wrong signal,Deleted","C");
                 }
                 else
                 {
                     timer.Stop();
                     timer.Interval = minInterval;
-                    Log("Reload Signal Received, Reloading","C");
+                    Log("Reload Signal Verified, Reloading","C");
                     LoadConfig();
                     File.Delete("C:\\yService\\controls\\RELOAD.ctr");
                     timer.Start();
