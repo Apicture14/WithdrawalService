@@ -52,12 +52,16 @@ namespace TestService
             //Log(ChromeFilePath);
             Log(cpf + "\\cfg.txt","C");
             
-            
+            LoadConfig();
             
             //logFile = new FileStream($"C:\\yService\\logs\\log {DateTime.Now.ToString("yyyyMMddHHmmss")}.txt", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read);
             timer.Interval = minInterval;
             timer.AutoReset = true; 
             timer.Elapsed += new ElapsedEventHandler(run);
+
+            btimer.Interval = 1000;
+            btimer.AutoReset = true;
+            btimer.Elapsed += new ElapsedEventHandler(listen);
         }
 
         private void Log(string text,string level="I")
@@ -79,6 +83,7 @@ namespace TestService
                 {
                     this.FolderPath = o.LogPath;
                     this.minInterval = o.minInterval;
+                    this.timer.Interval = this.minInterval;
                     if (o.maxInterval != -1)
                     {
                         this.maxInterval = o.maxInterval;
@@ -119,6 +124,7 @@ namespace TestService
         {
             base.OnStart(args);
             timer.Start();
+            btimer.Start();
         }
 
         protected override void OnStop()
@@ -131,24 +137,24 @@ namespace TestService
             {
                 Log("No Flag,Stopping.....");
                 logFile.Close(); 
+                btimer.Stop();
                 timer.Stop(); 
                 base.OnStop();
             }
-            
-            
-            
         }
 
         protected override void OnShutdown()
         {
             Log("System Shutting down!","W");
             timer.Stop();
+            btimer.Stop();
             logFile.Close();
             base.OnShutdown();
         }
 
         public void listen(object s, ElapsedEventArgs e)
         {
+            Log("LISTEN FOR SIGNALS","C");
             if (File.Exists("C:\\yService\\controls\\RELOAD.ctr"))
             {
                 timer.Stop();
@@ -157,6 +163,7 @@ namespace TestService
                 Log("Reload Signal Received, Reloading","C");
                 LoadConfig();
                 File.Delete("C:\\yService\\controls\\RELOAD.ctr");
+                timer.Start();
             }
         }
 
@@ -256,9 +263,6 @@ namespace TestService
             {
                 Log($"Idling Waiting for next schedule From {timeSpans[routine+1].Item1} To {timeSpans[routine+1].Item2}");
             }
-
-            
-            
             timer.Start();
         }
     }
