@@ -1,0 +1,13 @@
+C:\Users\_YBY\source\repos\TestService\bin\Release\TestService.exe.config
+C:\Users\_YBY\source\repos\TestService\bin\Release\TestService.exe
+C:\Users\_YBY\source\repos\TestService\bin\Release\TestService.pdb
+C:\Users\_YBY\source\repos\TestService\bin\Release\System.Runtime.Serialization.Primitives.dll
+C:\Users\_YBY\source\repos\TestService\bin\Release\YamlDotNet.NetCore.dll
+C:\Users\_YBY\source\repos\TestService\obj\Release\TestService.csproj.AssemblyReference.cache
+C:\Users\_YBY\source\repos\TestService\obj\Release\TestService.csproj.SuggestedBindingRedirects.cache
+C:\Users\_YBY\source\repos\TestService\obj\Release\TestService.ProjectInstaller.resources
+C:\Users\_YBY\source\repos\TestService\obj\Release\TestService.csproj.GenerateResource.cache
+C:\Users\_YBY\source\repos\TestService\obj\Release\TestService.csproj.CoreCompileInputs.cache
+C:\Users\_YBY\source\repos\TestService\obj\Release\TestService.csproj.CopyComplete
+C:\Users\_YBY\source\repos\TestService\obj\Release\TestService.exe
+C:\Users\_YBY\source\repos\TestService\obj\Release\TestService.pdb
