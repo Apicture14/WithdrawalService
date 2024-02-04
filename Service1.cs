@@ -114,7 +114,10 @@ namespace TestService
                         Log($"Random Interval Disabled, now Value is {this.minInterval}","C");
                     }
                 }
-                Log("Config invalid,abandoned","C");
+                else
+                {
+                    Log("Config invalid,abandoned","C");
+                }
             }
             else
             {
